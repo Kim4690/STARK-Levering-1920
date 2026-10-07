@@ -4,6 +4,66 @@
 <head>
     <script type="text/javascript">
 var bbState = 'production';
+
+/* ===== Adform tracking (BygTek) ===== */
+var ADFORM_CLICK_URL = 'https://track.adform.net/C/?bn=90604694;gdpr=${GDPR};gdpr_consent=${GDPR_CONSENT_50}';
+var ADFORM_IMPRESSION_URL = 'https://track.adform.net/adfserve/?bn=90604694;1x1inv=1;srctype=3;gdpr=${GDPR};gdpr_consent=${GDPR_CONSENT_50};ord=[timestamp]';
+var gdprApplies = null, gdprConsent = null;
+
+/* Hvis en adserver har udfyldt ${GDPR}-makroerne, bruges deres værdier uændret.
+   Serveres banneret direkte fra sitet, hentes samtykket fra sitets CMP (__tcfapi),
+   og findes der ingen CMP, fjernes de tomme makroer. */
+function fillGdpr(url) {
+    if (url.indexOf('${GDPR') === -1) return url;
+    if (gdprApplies !== null) {
+        url = url.replace('${GDPR}', gdprApplies ? '1' : '0')
+                 .replace('${GDPR_CONSENT_50}', encodeURIComponent(gdprConsent || ''));
+    } else {
+        url = url.replace(/;gdpr=\$\{GDPR\}/, '').replace(/;gdpr_consent=\$\{GDPR_CONSENT_50\}/, '');
+    }
+    return url;
+}
+
+function findTcfApi() {
+    var w = window;
+    try {
+        while (w) {
+            if (typeof w.__tcfapi === 'function') return w.__tcfapi;
+            if (w === w.parent) break;
+            w = w.parent;
+        }
+    } catch (e) {}
+    return null;
+}
+
+function withConsent(callback) {
+    var api = findTcfApi(), done = false;
+    function finish() { if (!done) { done = true; callback(); } }
+    if (!api) { finish(); return; }
+    try {
+        api('addEventListener', 2, function (tcData, ok) {
+            if (ok && tcData && (tcData.eventStatus === 'tcloaded' || tcData.eventStatus === 'useractioncomplete' || tcData.gdprApplies === false)) {
+                gdprApplies = !!tcData.gdprApplies;
+                gdprConsent = tcData.tcString || '';
+                finish();
+            }
+        });
+    } catch (e) {}
+    setTimeout(finish, 1500); // fallback, så impression aldrig går tabt
+}
+
+var impressionFired = false;
+function fireImpression() {
+    if (impressionFired) return;
+    impressionFired = true;
+    var url = fillGdpr(ADFORM_IMPRESSION_URL).replace('[timestamp]', String(new Date().getTime()) + Math.floor(Math.random() * 1e6));
+    var px = document.createElement('img');
+    px.src = url;
+    px.width = 1; px.height = 1; px.border = 0; px.alt = '';
+    px.style.cssText = 'position:absolute;width:1px;height:1px;left:-9999px;top:-9999px;border:0;';
+    document.body.appendChild(px);
+}
+/* ===== /Adform tracking ===== */
 var API; 
 var clickTAG;
 var clickTAG2;
@@ -34,7 +94,8 @@ window.onload = function() {
 	bb.init('5932ed6a12ad0314555f6837287ad1c8');
 	bb.trackElement('container');
 	landingpagetarget = dhtml.getVar('landingPageTarget', '_blank');
-	clickTAG = dhtml.getVar('clickTAG', 'https://www.stark.dk/?gdpr=${GDPR};gdpr_consent=${GDPR_CONSENT_597}');
+	clickTAG = dhtml.getVar('clickTAG', ADFORM_CLICK_URL);
+	withConsent(fireImpression);
 	
 	
 	init();
@@ -160,12 +221,24 @@ window.onload = function() {
             background-color: #FFF;
         }
 
+        body {
+            overflow: hidden;
+        }
+
+        /* Responsivt: fuld bredde, højde følger 1920:600 (16:5) */
         #container {
             position: relative;
             overflow: hidden;
             width: 100%;
-            height: 100%;
+            height: calc(600 / 1920 * 100vw);
+            aspect-ratio: 1920 / 600;
+            max-height: 100vh;
             cursor: pointer;
+        }
+
+        #container:focus-visible {
+            outline: 3px solid #005EB8;
+            outline-offset: -3px;
         }
 
         .frame {
@@ -261,7 +334,7 @@ window.onload = function() {
 </head>
 
 <body>
-    <div id="container" onclick="redir();">
+    <div id="container" onclick="redir();" role="link" tabindex="0" aria-label="STARK – gå til stark.dk" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();redir();}">
 
         <div id="preload">
             
@@ -518,14 +591,9 @@ window.onload = function() {
             }
             lastClick = new Date().getTime();
 
-            if (clickTagNum == undefined) {
-                clickTagNum = 1;
-            }
-            if (url != undefined) {
-                bb.openUrl(clickTagNum, url, itemId);
-            } else {
-                bb.open(clickTagNum);
-            }
+            var target = fillGdpr(clickTAG || ADFORM_CLICK_URL);
+            var win = (typeof landingpagetarget === 'string' && landingpagetarget) ? landingpagetarget : '_blank';
+            window.open(target, win);
         }
 
     </script>
