@@ -1,0 +1,25 @@
+{
+    "version": "1.0",
+    "title": "Display HTML5 Video banner, BygTek: mobil megabanner (300 KB)",
+    "description": "",
+    "width": "300",
+    "height": "250",
+    "events": {
+        "enabled": 1,
+        "list": {
+            "1": "Subpage activated",
+            "2": "Subpage closed",
+            "3": "Navigation prev",
+            "4": "Navigation next",
+            "5": "Video started",
+            "6": "Video ended",
+            "7": "Swipe",
+            "8": "Show disclaimer",
+            "9": "Hide disclaimer"
+        }
+    },
+    "clicktags": {
+        "clickTAG": "https:\/\/track.adform.net\/C\/?bn=90604694;gdpr=${GDPR};gdpr_consent=${GDPR_CONSENT_50}"
+    },
+    "source": "adform.html"
+}

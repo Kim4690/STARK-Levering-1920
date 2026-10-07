@@ -1,0 +1,602 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <script type="text/javascript">
+var bbState = 'production';
+
+/* ===== Adform tracking (BygTek) ===== */
+var ADFORM_CLICK_URL = 'https://track.adform.net/C/?bn=90604694;gdpr=${GDPR};gdpr_consent=${GDPR_CONSENT_50}';
+var ADFORM_IMPRESSION_URL = 'https://track.adform.net/adfserve/?bn=90604694;1x1inv=1;srctype=3;gdpr=${GDPR};gdpr_consent=${GDPR_CONSENT_50};ord=[timestamp]';
+var gdprApplies = null, gdprConsent = null;
+
+/* Hvis en adserver har udfyldt ${GDPR}-makroerne, bruges deres værdier uændret.
+   Serveres banneret direkte fra sitet, hentes samtykket fra sitets CMP (__tcfapi),
+   og findes der ingen CMP, fjernes de tomme makroer. */
+function fillGdpr(url) {
+    if (url.indexOf('${GDPR') === -1) return url;
+    if (gdprApplies !== null) {
+        url = url.replace('${GDPR}', gdprApplies ? '1' : '0')
+                 .replace('${GDPR_CONSENT_50}', encodeURIComponent(gdprConsent || ''));
+    } else {
+        url = url.replace(/;gdpr=\$\{GDPR\}/, '').replace(/;gdpr_consent=\$\{GDPR_CONSENT_50\}/, '');
+    }
+    return url;
+}
+
+function findTcfApi() {
+    var w = window;
+    try {
+        while (w) {
+            if (typeof w.__tcfapi === 'function') return w.__tcfapi;
+            if (w === w.parent) break;
+            w = w.parent;
+        }
+    } catch (e) {}
+    return null;
+}
+
+function withConsent(callback) {
+    var api = findTcfApi(), done = false;
+    function finish() { if (!done) { done = true; callback(); } }
+    if (!api) { finish(); return; }
+    try {
+        api('addEventListener', 2, function (tcData, ok) {
+            if (ok && tcData && (tcData.eventStatus === 'tcloaded' || tcData.eventStatus === 'useractioncomplete' || tcData.gdprApplies === false)) {
+                gdprApplies = !!tcData.gdprApplies;
+                gdprConsent = tcData.tcString || '';
+                finish();
+            }
+        });
+    } catch (e) {}
+    setTimeout(finish, 1500); // fallback, så impression aldrig går tabt
+}
+
+var impressionFired = false;
+function fireImpression() {
+    if (impressionFired) return;
+    impressionFired = true;
+    var url = fillGdpr(ADFORM_IMPRESSION_URL).replace('[timestamp]', String(new Date().getTime()) + Math.floor(Math.random() * 1e6));
+    var px = document.createElement('img');
+    px.src = url;
+    px.width = 1; px.height = 1; px.border = 0; px.alt = '';
+    px.style.cssText = 'position:absolute;width:1px;height:1px;left:-9999px;top:-9999px;border:0;';
+    document.body.appendChild(px);
+}
+/* ===== /Adform tracking ===== */
+var API; 
+var clickTAG;
+var clickTAG2;
+var clickTAG3;
+var clickTAG4;
+var clickTAG5;
+var clickTAG6;
+var clickTAG7;
+var clickTAG8;
+var clickTAG9;
+var clickTAG10;
+var landingpageTarget;
+
+var customEvents = [];
+customEvents[1] = 'Subpage activated';
+customEvents[2] = 'Subpage closed';
+customEvents[3] = 'Navigation prev';
+customEvents[4] = 'Navigation next';
+customEvents[5] = 'Video started';
+customEvents[6] = 'Video ended';
+customEvents[7] = 'Swipe';
+customEvents[8] = 'Show disclaimer';
+customEvents[9] = 'Hide disclaimer';
+
+
+window.onload = function() {
+	bb = new bbApi();
+	bb.init('08d806b24717b81a8eee7b4117122650');
+	bb.trackElement('container');
+	landingpagetarget = dhtml.getVar('landingPageTarget', '_blank');
+	clickTAG = dhtml.getVar('clickTAG', ADFORM_CLICK_URL);
+	withConsent(fireImpression);
+	
+	
+	init();
+}
+
+</script>
+<script> var manifest = JSON.parse('{"width":300,"height":250,"events":{"1000":"Subpage activated","1001":"Subpage closed","1002":"Navigation prev","1003":"Navigation next","1004":"Video started","1005":"Video ended","1006":"Swipe","1007":"Show disclaimer","1008":"Hide disclaimer"},"groupings":{"Subpage":["1000","1001"],"Navigation":["1002","1003","1006"],"Video":["1004","1005"],"Popup":["1007","1008"]}}'); </script>
+<script type="text/javascript" src="https://cloud.adjust-digital.com/library/0.4.2/adjust-api-AF.js"></script>
+<script type="text/javascript" src="https://s1.adform.net/banners/scripts/rmb/Adform.DHTML.js"></script>
+    <script type="text/javascript" src="https://s0.2mdn.net/ads/studio/cached_libs/gsap_3.11.1_min.js"></script>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style type="text/css">
+        ::-webkit-scrollbar {
+            display: none;
+        }
+
+        body,
+        html {
+            width: 100%;
+            height: 100%;
+            margin: 0;
+            padding: 0;
+            -moz-text-size-adjust: none;
+            -ms-text-size-adjust: none;
+            -webkit-text-size-adjust: none;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        img {
+            border: 0 none;
+            -webkit-backface-visibility: hidden;
+            -webkit-transform: translateZ(0) scale(1.0, 1.0);
+        }
+
+        .zIndex-1 {
+            z-index: 1;
+        }
+
+        .zIndex-2 {
+            z-index: 2;
+        }
+
+        .zIndex-3 {
+            z-index: 3;
+        }
+
+        .zIndex-4 {
+            z-index: 4;
+        }
+
+        .zIndex-5 {
+            z-index: 5;
+        }
+
+        .zIndex-6 {
+            z-index: 6;
+        }
+
+        .zIndex-7 {
+            z-index: 7;
+        }
+
+        .zIndex-8 {
+            z-index: 8;
+        }
+
+        .zIndex-9 {
+            z-index: 9;
+        }
+
+        .zIndex-10 {
+            z-index: 10;
+        }
+
+        .noClick {
+            pointer-events: none;
+        }
+
+        .hidden {
+            visibility: hidden;
+        }
+
+        .alphaNone {
+            opacity: 0;
+        }
+
+        .topLeft {
+            position: absolute;
+            top: 0;
+            left: 0;
+        }
+
+        .topRight {
+            position: absolute;
+            top: 0;
+            right: 0;
+        }
+
+        .bottomLeft {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+        }
+
+        .bottomRight {
+            position: absolute;
+            bottom: 0;
+            right: 0;
+        }
+
+        .full_width {
+            width: 100%;
+        }
+
+        .full_height {
+            height: 100%;
+        }
+
+        #banner_bg {
+            width: 100%;
+            height: 100%;
+            background-color: #FFF;
+        }
+
+        body {
+            overflow: hidden;
+        }
+
+        /* Responsivt: fuld bredde, højde følger 300:250 (6:5) */
+        #container {
+            position: relative;
+            overflow: hidden;
+            width: 100%;
+            height: calc(250 / 300 * 100vw);
+            aspect-ratio: 300 / 250;
+            max-height: 100vh;
+            cursor: pointer;
+        }
+
+        #container:focus-visible {
+            outline: 3px solid #005EB8;
+            outline-offset: -3px;
+        }
+
+        .frame {
+            position: absolute;
+            background: none;
+            z-index: 99999;
+        }
+
+        .frameTop {
+            width: 100%;
+            height: 1px;
+            top: 0;
+            left: 0;
+        }
+
+        .frameBottom {
+            width: 100%;
+            height: 1px;
+            bottom: 0;
+            left: 0;
+        }
+
+        .frameLeft {
+            width: 1px;
+            height: 100%;
+            top: 0;
+            left: 0;
+        }
+
+        .frameRight {
+            width: 1px;
+            height: 100%;
+            top: 0;
+            right: 0;
+        }
+
+        .banner_size {
+            width: 100%;
+        }
+
+        .full_banner_size {
+            width: calc(300% /300*100);
+            height: calc(250 /250*100vw);
+        }
+
+        .video_autoplay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            object-position: center;
+        }
+
+        @font-face {
+            font-family: 'GTAmerica-CondensedBlack';
+            src: url('https://betterbannerscloud.com/static/fonts/stark/GTAmerica-CondensedBlack.woff') format('woff');
+            font-style: normal;
+            font-display: block;
+        }
+
+        .btn_container {
+            top: calc(205 / 300 * 100vw);
+            left: calc(95% / 300 * 100);
+            width: calc(111% / 300 * 100);
+            height: calc(30 / 300 * 100vw);
+        }
+
+        #txt1_container,
+
+
+        #txt2_container {
+
+
+            width: 100%;
+
+
+            height: 100%;
+
+
+        }
+
+
+
+        #logo_container {
+            top: calc(101 / 300 * 100vw);
+            left: calc(42% / 300 * 100);
+            width: calc(218% / 300 * 100);
+            height: calc(49 / 300 * 100vw);
+        }
+    </style>
+</head>
+
+<body>
+    <div id="container" onclick="redir();" role="link" tabindex="0" aria-label="STARK – gå til stark.dk" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();redir();}">
+
+        <div id="preload">
+            
+        </div>
+
+        <div class="frame frameTop"></div>
+        <div class="frame frameBottom"></div>
+        <div class="frame frameLeft"></div>
+        <div class="frame frameRight"></div>
+
+    </div>
+
+    <script type="text/javascript">
+        var usePoliteLoad = false,
+            bannerStartTime,
+
+            bannerWidth = 2560,
+            bannerHeight = 1140,
+
+            textAnimationX = 100,
+            textAnimationY = 0,
+
+            hasBeenInViewPort = false,
+
+            counterMain = 0;
+
+        var tlMain = new gsap.timeline({ onComplete: tlMainRestart });
+        tlMain.pause();
+
+
+        function init() {
+            bb.registerImpression();
+            if (usePoliteLoad == true) {
+                bb.politeListen();
+            } else {
+                var preloadContent = 		'' +
+		'                <div class="topLeft banner_size" id="banner_bg"></div>' +
+		'' +
+		'' +
+		'                <img src="https://cloud.adjust-digital.com/creatives/84b9b67d398a6f69a4764f623e9cfd22/assets/first_frame.jpg" class="topLeft banner_size alphaNone" id="first_frame" />' +
+		'                <video class="video_autoplay full_height " id="video_autoplay" playsinline muted preload="auto">' +
+		'                    <source src="https://cloud.adjust-digital.com/creatives/84b9b67d398a6f69a4764f623e9cfd22/assets/video_autoplay_16x9_container_LeveringV1.mp4" type="video/mp4" />' +
+		'                </video>' +
+		'                <img src="https://cloud.adjust-digital.com/creatives/84b9b67d398a6f69a4764f623e9cfd22/assets/bg.jpg" class="topLeft banner_size alphaNone" id="bg" />' +
+		'' +
+		'                <img src="https://cloud.adjust-digital.com/creatives/84b9b67d398a6f69a4764f623e9cfd22/assets/overlay.png" class="topLeft full_height full_width banner_size" id="overlay" />' +
+		'                <img src="https://cloud.adjust-digital.com/creatives/84b9b67d398a6f69a4764f623e9cfd22/assets/txt1.png" class="topLeft banner_size alphaNone" id="txt1_container" />' +
+		'                <img src="https://cloud.adjust-digital.com/creatives/84b9b67d398a6f69a4764f623e9cfd22/assets/txt2.png" class="topLeft banner_size alphaNone" id="txt2_container" />' +
+		'' +
+		'' +
+		'                <img src="https://cloud.adjust-digital.com/creatives/84b9b67d398a6f69a4764f623e9cfd22/assets/logo.png" class="topLeft banner_size" id="logo" />' +
+		'' +
+		'                <div class="topLeft btn_container alphaNone" onmouseover="btn_container_mouseover();"' +
+		'                    onmouseout="btn_container_mouseout();">' +
+		'                    <div class="topLeft full_width full_height btn_normal_container">' +
+		'                        <img src="https://cloud.adjust-digital.com/creatives/84b9b67d398a6f69a4764f623e9cfd22/assets/btn_n.png" class="topLeft full_width full_height btn_normal" />' +
+		'                    </div>' +
+		'                    <div class="topLeft alphaNone full_width full_height btn_hover_container">' +
+		'                        <img src="https://cloud.adjust-digital.com/creatives/84b9b67d398a6f69a4764f623e9cfd22/assets/btn_h.png" class="topLeft full_width full_height btn_hover" />' +
+		'                    </div>' +
+		'                </div>' +
+		'' +
+		'                <div class="topLeft" id="logo_container">' +
+		'                    <img src="https://cloud.adjust-digital.com/creatives/84b9b67d398a6f69a4764f623e9cfd22/assets/logo_icon.png" class="topLeft full_width alphaNone logo" id="logo_icon" />' +
+		'                    <img src="https://cloud.adjust-digital.com/creatives/84b9b67d398a6f69a4764f623e9cfd22/assets/logo_s.png" class="topLeft full_width alphaNone logo logo_letter" id="logo_s" />' +
+		'                    <img src="https://cloud.adjust-digital.com/creatives/84b9b67d398a6f69a4764f623e9cfd22/assets/logo_t.png" class="topLeft full_width alphaNone logo logo_letter" id="logo_t" />' +
+		'                    <img src="https://cloud.adjust-digital.com/creatives/84b9b67d398a6f69a4764f623e9cfd22/assets/logo_a.png" class="topLeft full_width alphaNone logo logo_letter" id="logo_a" />' +
+		'                    <img src="https://cloud.adjust-digital.com/creatives/84b9b67d398a6f69a4764f623e9cfd22/assets/logo_r.png" class="topLeft full_width alphaNone logo logo_letter" id="logo_r" />' +
+		'                    <img src="https://cloud.adjust-digital.com/creatives/84b9b67d398a6f69a4764f623e9cfd22/assets/logo_k.png" class="topLeft full_width alphaNone logo logo_letter" id="logo_k" />' +
+		'                    <img src="https://cloud.adjust-digital.com/creatives/84b9b67d398a6f69a4764f623e9cfd22/assets/logo_txt.png" class="topLeft full_width alphaNone logo" id="logo_txt" />' +
+		'                </div>' +
+		'' +
+		'                <div class="topLeft alphaNone" id="delay"></div>' +
+		'' +
+		'            ';
+		document.getElementById('preload').innerHTML = preloadContent;
+		bb.preload();
+
+            }
+        }
+
+        function politeDone() {
+            var preloadContent = 		'' +
+		'                <div class="topLeft banner_size" id="banner_bg"></div>' +
+		'' +
+		'' +
+		'                <img src="https://cloud.adjust-digital.com/creatives/84b9b67d398a6f69a4764f623e9cfd22/assets/first_frame.jpg" class="topLeft banner_size alphaNone" id="first_frame" />' +
+		'                <video class="video_autoplay full_height " id="video_autoplay" playsinline muted preload="auto">' +
+		'                    <source src="https://cloud.adjust-digital.com/creatives/84b9b67d398a6f69a4764f623e9cfd22/assets/video_autoplay_16x9_container_LeveringV1.mp4" type="video/mp4" />' +
+		'                </video>' +
+		'                <img src="https://cloud.adjust-digital.com/creatives/84b9b67d398a6f69a4764f623e9cfd22/assets/bg.jpg" class="topLeft banner_size alphaNone" id="bg" />' +
+		'' +
+		'                <img src="https://cloud.adjust-digital.com/creatives/84b9b67d398a6f69a4764f623e9cfd22/assets/overlay.png" class="topLeft full_height full_width banner_size" id="overlay" />' +
+		'                <img src="https://cloud.adjust-digital.com/creatives/84b9b67d398a6f69a4764f623e9cfd22/assets/txt1.png" class="topLeft banner_size alphaNone" id="txt1_container" />' +
+		'                <img src="https://cloud.adjust-digital.com/creatives/84b9b67d398a6f69a4764f623e9cfd22/assets/txt2.png" class="topLeft banner_size alphaNone" id="txt2_container" />' +
+		'' +
+		'' +
+		'                <img src="https://cloud.adjust-digital.com/creatives/84b9b67d398a6f69a4764f623e9cfd22/assets/logo.png" class="topLeft banner_size" id="logo" />' +
+		'' +
+		'                <div class="topLeft btn_container alphaNone" onmouseover="btn_container_mouseover();"' +
+		'                    onmouseout="btn_container_mouseout();">' +
+		'                    <div class="topLeft full_width full_height btn_normal_container">' +
+		'                        <img src="https://cloud.adjust-digital.com/creatives/84b9b67d398a6f69a4764f623e9cfd22/assets/btn_n.png" class="topLeft full_width full_height btn_normal" />' +
+		'                    </div>' +
+		'                    <div class="topLeft alphaNone full_width full_height btn_hover_container">' +
+		'                        <img src="https://cloud.adjust-digital.com/creatives/84b9b67d398a6f69a4764f623e9cfd22/assets/btn_h.png" class="topLeft full_width full_height btn_hover" />' +
+		'                    </div>' +
+		'                </div>' +
+		'' +
+		'                <div class="topLeft" id="logo_container">' +
+		'                    <img src="https://cloud.adjust-digital.com/creatives/84b9b67d398a6f69a4764f623e9cfd22/assets/logo_icon.png" class="topLeft full_width alphaNone logo" id="logo_icon" />' +
+		'                    <img src="https://cloud.adjust-digital.com/creatives/84b9b67d398a6f69a4764f623e9cfd22/assets/logo_s.png" class="topLeft full_width alphaNone logo logo_letter" id="logo_s" />' +
+		'                    <img src="https://cloud.adjust-digital.com/creatives/84b9b67d398a6f69a4764f623e9cfd22/assets/logo_t.png" class="topLeft full_width alphaNone logo logo_letter" id="logo_t" />' +
+		'                    <img src="https://cloud.adjust-digital.com/creatives/84b9b67d398a6f69a4764f623e9cfd22/assets/logo_a.png" class="topLeft full_width alphaNone logo logo_letter" id="logo_a" />' +
+		'                    <img src="https://cloud.adjust-digital.com/creatives/84b9b67d398a6f69a4764f623e9cfd22/assets/logo_r.png" class="topLeft full_width alphaNone logo logo_letter" id="logo_r" />' +
+		'                    <img src="https://cloud.adjust-digital.com/creatives/84b9b67d398a6f69a4764f623e9cfd22/assets/logo_k.png" class="topLeft full_width alphaNone logo logo_letter" id="logo_k" />' +
+		'                    <img src="https://cloud.adjust-digital.com/creatives/84b9b67d398a6f69a4764f623e9cfd22/assets/logo_txt.png" class="topLeft full_width alphaNone logo" id="logo_txt" />' +
+		'                </div>' +
+		'' +
+		'                <div class="topLeft alphaNone" id="delay"></div>' +
+		'' +
+		'            ';
+		document.getElementById('preload').innerHTML = preloadContent;
+		bb.preload();
+
+        }
+
+        function preloadDone() {
+
+            //STANDARD ELEMENT RESET//
+            gsap.set(".btn_container", { alpha: 1, transformOrigin: "50% 50%" });
+            gsap.set(txt1_container, { alpha: 0 });
+            gsap.set(txt2_container, { alpha: 0 });
+
+            //RESET//
+            tlMain.set(".logo", { alpha: 0 });
+            tlMain.set(".logo_letter", { xPercent: -2, webkitFilter: "blur(2px)" });
+            tlMain.set(bg, { alpha: 0 });
+
+            //PLAY//
+            tlMain.to(txt1_container, {
+                alpha: 1, ease: "quad.inOut", duration: 0.5, delay: 0.2, onStart: function () {
+                    document.getElementById('video_autoplay').play();
+                }
+            });
+
+            tlMain.to(".btn_container", { scale: 0.9, ease: "none", duration: 0.2, delay: 1 });
+            tlMain.to(".btn_container", { scale: 1, ease: "none", duration: 0.2, delay: 0 });
+            tlMain.to(".btn_container", { scale: 0.9, ease: "none", duration: 0.2, delay: 0 });
+            tlMain.to(".btn_container", { scale: 1, ease: "none", duration: 0.2, delay: 0 });
+
+            tlMain.to(txt1_container, { alpha: 0, ease: "expo.in", duration: 0.5, delay: 0 });
+            tlMain.to(txt2_container, { alpha: 1, ease: "quad.inOut", duration: 0.5, delay: -0.25 });
+
+            tlMain.to(".btn_container", { scale: 0.9, ease: "none", duration: 0.2, delay: 1 });
+            tlMain.to(".btn_container", { scale: 1, ease: "none", duration: 0.2, delay: 0 });
+            tlMain.to(".btn_container", { scale: 0.9, ease: "none", duration: 0.2, delay: 0 });
+            tlMain.to(".btn_container", { scale: 1, ease: "none", duration: 0.2, delay: 0 });
+
+            tlMain.to(txt2_container, { alpha: 0, ease: "expo.in", duration: 0.5, delay: 0 });
+
+            tlMain.to([logo_icon, logo_txt], { alpha: 1, ease: "quad.inOut", duration: 0.5, delay: 0 });
+            tlMain.to(logo, { alpha: 0, ease: "quad.inOut", duration: 0.5, delay: -0.5 });
+            tlMain.to('.logo_letter', { webkitFilter: "blur(0px)", xPercent: 0, alpha: 1, ease: "expo", stagger: 0.1, duration: 0.5, delay: -0.25, onComplete: tlCheckCount });
+
+            tlMain.to(logo_k, { xPercent: 16, ease: "expo.in", duration: 0.4, delay: 0 });
+            tlMain.to(logo_r, { xPercent: 12, ease: "expo.in", duration: 0.4, delay: -0.4 });
+            tlMain.to(logo_a, { xPercent: 8, ease: "expo.in", duration: 0.4, delay: -0.4 });
+            tlMain.to(logo_t, { xPercent: 4, ease: "expo.in", duration: 0.4, delay: -0.4 });
+            tlMain.to(logo_icon, { xPercent: -8, ease: "expo.in", duration: 0.4, delay: -0.4 });
+
+            tlMain.to(logo_k, { xPercent: 0, ease: "expo", duration: 0.5, delay: 0 });
+            tlMain.to(logo_r, { xPercent: 0, ease: "expo", duration: 0.5, delay: -0.5 });
+            tlMain.to(logo_a, { xPercent: 0, ease: "expo", duration: 0.5, delay: -0.5 });
+            tlMain.to(logo_t, { xPercent: 0, ease: "expo", duration: 0.5, delay: -0.5 });
+            tlMain.to(logo_icon, { xPercent: 0, ease: "expo", duration: 0.5, delay: -0.5 });
+            tlMain.to(logo_container, { alpha: 0, ease: "quad.inOut", duration: 0.5, delay: 0 });
+            tlMain.to(logo, { alpha: 1, ease: "quad.inOut", duration: 0.5, delay: -0.5 });
+
+
+
+
+
+
+            document.getElementById("container").onmouseover = bb.mouseOver;
+            document.getElementById("container").onmouseout = bb.mouseOut;
+
+            bb.viewportListen();
+        }
+
+        function inViewport() {
+            if (!hasBeenInViewPort) {
+                hasBeenInViewPort = true;
+                bannerStartTime = performance.now();
+                tlMain.restart();
+                document.getElementById("video_autoplay").playbackRate = 0.8;
+            }
+        }
+
+        function tlMainRestart() {
+            counterMain++;
+            document.getElementById("video_autoplay").currentTime = 0;
+            tlMain.restart();
+        }
+
+        function tlCheckCount() {
+            if (counterMain == 2) {
+                gsap.to(bg, { alpha: 1, ease: "quad.inOut", duration: 0.5 });
+                tlMain.pause();
+            }
+            //bannerAnimationTime();
+        }
+
+        function stopVideoAutoplay() {
+            document.getElementById('video_autoplay').pause();
+            gsap.set(".video_autoplay", { alpha: 0 }); //DELETE IF NO VIDEO AUTOPLAY BG//
+        }
+
+
+
+        function mouseOverListener() {
+            btn_container_mouseover();
+        }
+
+        function mouseOutListener() {
+            btn_container_mouseout();
+        }
+
+        function btn_container_mouseover() {
+            gsap.to(".btn_normal_container", { alpha: 0, duration: 0.1, delay: 0.1 });
+            gsap.to(".btn_hover_container", { alpha: 1, duration: 0.1, delay: 0.1 });
+        }
+
+        function btn_container_mouseout() {
+            gsap.to(".btn_normal_container", { alpha: 1, duration: 0.1, delay: 0.1 });
+            gsap.to(".btn_hover_container", { alpha: 0, duration: 0.1, delay: 0.1 });
+        }
+
+        function bannerAnimationTime() {
+            var bannerEndTime = performance.now();
+            console.log((bannerEndTime / 1000.0) - (bannerStartTime / 1000.0));
+        }
+
+        var lastClick = new Date().getTime();
+
+        function ignoreClick() {
+            lastClick = new Date().getTime();
+        }
+
+        function redir(clickTagNum, url, itemId) {
+
+            if (lastClick + 500 > new Date().getTime()) {
+                return;
+            }
+            lastClick = new Date().getTime();
+
+            var target = fillGdpr(clickTAG || ADFORM_CLICK_URL);
+            var win = (typeof landingpagetarget === 'string' && landingpagetarget) ? landingpagetarget : '_blank';
+            window.open(target, win);
+        }
+
+    </script>
+</body>
+
+</html>
