@@ -1,9 +1,9 @@
 {
     "version": "1.0",
-    "title": "Display HTML5 Video banner, BygTek: mobil megabanner (300 KB)",
+    "title": "Display HTML5 Video banner, BygTek: Desktop megabanner (300 KB)",
     "description": "",
-    "width": "300",
-    "height": "250",
+    "width": "1920",
+    "height": "600",
     "events": {
         "enabled": 1,
         "list": {
